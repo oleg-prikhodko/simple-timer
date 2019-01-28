@@ -31,6 +31,7 @@ class Timer {
     this.startTime = Date.now();
     this.timeoutId = setInterval(() => {
       this.elapsed = Date.now() - this.startTime;
+      updateArc(this.elapsed / this.duration);
       if (this.elapsed >= this.duration) {
         this.stop();
         setElapsed(this.duration);
@@ -52,11 +53,45 @@ const button = document.getElementById("start-button");
 button.onclick = () => {
   if (timer.ticking) {
     timer.stop();
-    button.innerHTML = "Start"
+    button.innerHTML = "Start";
   } else {
     timer.setDuration(durationInput.value);
     timer.start();
     durationInput.disabled = true;
-    button.innerHTML = "Stop"
+    button.innerHTML = "Stop";
   }
 };
+
+function polarToCartesian(centerX, centerY, radius, angleDegrees) {
+  const angleRadians = ((angleDegrees - 90) * Math.PI) / 180.0;
+  return {
+    x: centerX + radius * Math.cos(angleRadians),
+    y: centerY + radius * Math.sin(angleRadians)
+  };
+}
+
+function describeArc(x, y, radius, startAngle, endAngle) {
+  const start = polarToCartesian(x, y, radius, endAngle);
+  const end = polarToCartesian(x, y, radius, startAngle);
+
+  const startCoords = `${start.x} ${start.y}`;
+  const ellipse = `${radius} ${radius}`;
+  const rotation = 0;
+  const arc = endAngle - startAngle <= 180 ? "0" : "1";
+  const sweep = 0;
+  const endCoords = `${end.x} ${end.y}`;
+  const d = `M ${startCoords} A ${ellipse} ${rotation} ${arc} ${sweep} ${endCoords}`;
+  return d;
+}
+
+function updateArc(ratio) {
+  const arcElement = document.getElementById("arc");
+  ratio = ratio === 0 ? 0.01 : ratio;
+  const hue = 100 - ratio * 100;
+  arcElement.setAttribute("stroke", `hsl(${hue}, 100%, 50%)`);
+
+  let degree = ratio * 360;
+  degree = degree >= 360 ? 359.99 : degree;
+  const arc = describeArc(10, 10, 8, 0, degree);
+  arcElement.setAttribute("d", arc);
+}
