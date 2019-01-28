@@ -3,7 +3,7 @@ const { app, Tray, BrowserWindow } = require("electron");
 let win = null;
 function createWindow(trayIconOffset) {
   const windowWidth = 200;
-  const windowHeight = 200;
+  const windowHeight = 250;
   const yOffset = 0;
   const xOffset = trayIconOffset - windowWidth / 2;
   win = new BrowserWindow({

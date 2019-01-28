@@ -1,5 +1,44 @@
-<h2>Simple Timer</h2>
-<label>Duration in seconds:</label> <input type="text" id="duration-input" />
+<style>
+  .svg-container {
+    position: relative;
+    width: 100%;
+    margin: 0;
+  }
+  svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+  .text {
+    font: 3px sans-serif;
+  }
+</style>
+<!-- <h2>Simple Timer</h2> -->
+<label>Duration (seconds):</label>
+<input type="text" id="duration-input" size="4" />
 <button id="start-button">Start timer</button>
-<span>Elapsed: <b id="elapsed-label">00 : 00</b></span>
+<hr />
+<div class="svg-container">
+  <!-- <span>Elapsed: <b id="elapsed-label">00 : 00</b></span> -->
+  <svg viewBox="0 0 20 20">
+    <circle
+      cx="10"
+      cy="10"
+      r="8"
+      stroke="green"
+      stroke-width="0.5"
+      fill="none"
+    />
+    <text
+      x="50%"
+      y="50%"
+      dominant-baseline="middle"
+      text-anchor="middle"
+      class="text"
+      id="elapsed-label"
+    >
+      00 : 00
+    </text>
+  </svg>
+</div>
 <script src="renderer.js"></script>
