@@ -1,6 +1,7 @@
 const elapsedLabel = document.getElementById("elapsed-label");
 const durationInput = document.getElementById("duration-input");
 const button = document.getElementById("start-button");
+const resetButton = document.getElementById("reset-button");
 
 durationInput.oninput = event => {
   event.target.value = event.target.value.replace(/\D/g, "");
@@ -68,6 +69,14 @@ button.onclick = () => {
   }
 };
 
+resetButton.onclick = () => {
+  if (timer.ticking) timer.stop();
+  timer.elapsed = 0;
+  button.innerHTML = "Start";
+  elapsedLabel.innerHTML = "00 : 00";
+  updateArc();
+};
+
 function polarToCartesian(centerX, centerY, radius, angleDegrees) {
   const angleRadians = ((angleDegrees - 90) * Math.PI) / 180.0;
   return {
@@ -92,6 +101,10 @@ function describeArc(x, y, radius, startAngle, endAngle) {
 
 function updateArc(ratio) {
   const arcElement = document.getElementById("arc");
+  if (!ratio) {
+    arcElement.removeAttribute("d");
+    return;
+  }
   ratio = ratio === 0 ? 0.01 : ratio;
   const hue = 100 - ratio * 100;
   arcElement.setAttribute("stroke", `hsl(${hue}, 100%, 50%)`);
