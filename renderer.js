@@ -5,7 +5,12 @@ durationInput.oninput = event => {
 };
 
 function setElaplsed(elapsedMillis) {
-  elapsedLabel.innerHTML = Math.round(elapsedMillis / 1000);
+  const elapsedSeconds = Math.round(elapsedMillis / 1000);
+  let minutes = Math.floor(elapsedSeconds / 60);
+  let seconds = elapsedSeconds % 60;
+  minutes = minutes.toString().padStart(2, "0");
+  seconds = seconds.toString().padStart(2, "0");
+  elapsedLabel.innerHTML = `${minutes} : ${seconds}`;
 }
 
 class Timer {
