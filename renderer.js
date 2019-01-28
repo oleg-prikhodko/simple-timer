@@ -4,7 +4,12 @@ const button = document.getElementById("start-button");
 const resetButton = document.getElementById("reset-button");
 
 durationInput.oninput = event => {
-  event.target.value = event.target.value.replace(/\D/g, "");
+  const inputValue = event.target.value.replace(/\D/g, "");
+  if (parseInt(inputValue) === 0) {
+    event.target.value = "";
+  } else if (parseInt(inputValue) > 3599) {
+    event.target.value = 3599;
+  }
 };
 
 function setElapsed(elapsedMillis) {
