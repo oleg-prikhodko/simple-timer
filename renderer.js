@@ -1,5 +1,7 @@
 const elapsedLabel = document.getElementById("elapsed-label");
 const durationInput = document.getElementById("duration-input");
+const button = document.getElementById("start-button");
+
 durationInput.oninput = event => {
   event.target.value = event.target.value.replace(/\D/g, "");
 };
@@ -19,26 +21,31 @@ class Timer {
     this.elapsed = 0;
     this.ticking = false;
     this.stop = this.stop.bind(this);
+    this.tick = this.tick.bind(this);
   }
 
   setDuration(durationInSecs) {
     if (!this.ticking) this.duration = durationInSecs * 1000;
   }
 
+  tick() {
+    this.elapsed += Date.now() - this.lastTickTime;
+    this.lastTickTime = Date.now();
+    updateArc(this.elapsed / this.duration);
+    if (this.elapsed >= this.duration) {
+      this.stop();
+      setElapsed(this.duration);
+      button.innerHTML = "Start";
+    } else {
+      setElapsed(this.elapsed);
+    }
+  }
+
   start() {
     this.ticking = true;
-    this.elapsed = 0;
-    this.startTime = Date.now();
-    this.timeoutId = setInterval(() => {
-      this.elapsed = Date.now() - this.startTime;
-      updateArc(this.elapsed / this.duration);
-      if (this.elapsed >= this.duration) {
-        this.stop();
-        setElapsed(this.duration);
-      } else {
-        setElapsed(this.elapsed);
-      }
-    }, 1000);
+    if (this.elapsed >= this.duration) this.elapsed = 0;
+    this.lastTickTime = Date.now();
+    this.timeoutId = setInterval(this.tick, 1000);
   }
 
   stop() {
@@ -49,11 +56,10 @@ class Timer {
 }
 const timer = new Timer();
 
-const button = document.getElementById("start-button");
 button.onclick = () => {
   if (timer.ticking) {
     timer.stop();
-    button.innerHTML = "Start";
+    button.innerHTML = "Continue";
   } else {
     timer.setDuration(durationInput.value);
     timer.start();
