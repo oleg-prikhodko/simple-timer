@@ -30,11 +30,13 @@ class Timer {
     this.startTime = Date.now();
     const timeoutId = setInterval(() => {
       this.elapsed = Date.now() - this.startTime;
-      setElaplsed(this.elapsed);
       if (this.elapsed >= this.duration) {
         this.ticking = false;
         clearInterval(timeoutId);
         durationInput.disabled = false;
+        setElaplsed(this.duration);
+      } else {
+        setElaplsed(this.elapsed);
       }
     }, 1000);
   }
