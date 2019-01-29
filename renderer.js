@@ -42,6 +42,9 @@ class Timer {
       this.stop();
       setElapsed(this.duration);
       button.innerHTML = "Start";
+      new Notification("Time is up", {
+        body: `${Math.round(this.duration / 1000)} seconds has passed`
+      });
     } else {
       setElapsed(this.elapsed);
     }
